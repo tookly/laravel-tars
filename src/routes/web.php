@@ -12,5 +12,14 @@
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return "Hello World";
+});
+
+Route::group(['prefix' => '/Laravel/route'], function () {
+    
+    Route::get('/test', function () {
+        \Illuminate\Support\Facades\Log::info('laravel tars test log');
+        return 'Laravel Tars Test Success';
+    });
+    
 });
