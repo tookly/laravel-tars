@@ -7,6 +7,6 @@
  */
 return array(
     'appName' => 'php',
-    'serverName' => 'miniHabitHttpServer',
+    'serverName' => 'laravelHttpServer',
     'objName' => 'obj',
 );
