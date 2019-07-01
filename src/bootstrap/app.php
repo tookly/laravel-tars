@@ -41,6 +41,41 @@ $app->singleton(
     App\Exceptions\Handler::class
 );
 
+// 理解下来，绑定即是告诉容器如何解析接口，从而构建对象。
+// 简单绑定，注册的类或接口名，返回类的实例。
+$app->bind('Cxl\Kernel', function() {
+    return new Cxl\Kernel();
+});
+// 简单绑定，或者是将接口绑定到它的一个实现。
+$app->bind(\Cxl\BaseKernel::class,\Cxl\Kernel::class);
+
+// 单例绑定
+$app->singleton('Cxl\Kernel', function() {
+    return new Cxl\Kernel();
+});
+
+// 实例绑定
+$kernel = new \Cxl\Kernel();
+$app->instance('Cxl\Kernel', $kernel);
+
+// 绑定初始数据，这个意思是在这个类里需要某个变量时，就把注册的变量给他。
+// 这个不仅可以绑定初始数据，也可以用来绑定不同上下文中的接口的实现。
+$rule = array();
+$app->when('Cxl\Controller')
+    ->needs('rule')
+    ->give($rule);
+
+// 这个没有太明白做什么用
+$app->tag(['AReport', 'BReport'], 'reports');
+$app->bind('Cxl\Kernel', function($app) {
+    return new \Cxl\Kernel($app->tagged('reports'));
+});
+
+// 使用make方法将容器中的类实例解析出来
+$kernel = $app->make('Cxl\Kernel');
+//$app->makeWith();
+
+
 /*
 |--------------------------------------------------------------------------
 | Return The Application
